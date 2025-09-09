@@ -21,4 +21,10 @@ class Pelanggan extends Model
         'tanggal_pemasangan',
         'status'
     ];
+
+    public function tagihan()
+    {
+        return $this->hasMany(Tagihan::class, 'pelanggan_id');
+    }
+
 }

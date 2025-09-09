@@ -7,7 +7,7 @@ aria-label="Main navigation" data-accordion="false" id="navigation">
     </a>
 </li>
 <li class="nav-item">
-    <a href="{{ asset('/')}}lte/dist/generate/theme.html" class="nav-link">
+    <a href="{{ route(name: 'tagihan.index') }}" class="nav-link">
         <i class="nav-icon bi bi-palette"></i>
         <p>Tagihan</p>
     </a>
