@@ -1,7 +1,7 @@
 <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation"
 aria-label="Main navigation" data-accordion="false" id="navigation">
 <li class="nav-item">
-    <a href="{{ asset('/')}}lte/dist/generate/theme.html" class="nav-link">
+    <a href="{{ route('dashboard') }}" class="nav-link">
         <i class="nav-icon bi bi-palette"></i>
         <p>Dashboard</p>
     </a>
@@ -28,20 +28,20 @@ aria-label="Main navigation" data-accordion="false" id="navigation">
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
-            <a href="{{ asset('/')}}lte/dist/index.html" class="nav-link active">
+            <a href="{{ route('laporan.pembayaran') }}" class="nav-link active">
                 <i class="nav-icon bi bi-circle"></i>
                 <p>Pembayaran</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ asset('/')}}lte/dist/index2.html" class="nav-link">
+            <a href="{{ route('laporan.tagihan') }}" class="nav-link">
                 <i class="nav-icon bi bi-circle"></i>
                 <p>Tagihan</p>
             </a>
         </li>
     </ul>
 </li>
-<li class="nav-item menu-open">
+{{-- <li class="nav-item menu-open">
     <a href="#" class="nav-link active">
         <i class="nav-icon bi bi-speedometer"></i>
         <p>
@@ -63,5 +63,5 @@ aria-label="Main navigation" data-accordion="false" id="navigation">
             </a>
         </li>
     </ul>
-</li>
+</li> --}}
 </ul>

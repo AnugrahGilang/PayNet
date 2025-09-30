@@ -73,4 +73,12 @@ class TagihanController extends Controller
 
         return redirect()->route('tagihan.index')->with('success', 'Tagihan berhasil dihapus');
     }
+
+    public function print($id)
+{
+    $tagihan = Tagihan::with('pelanggan')->findOrFail($id);
+
+    return view('pages.admin.tagihan.print', compact('tagihan'));
+}
+
 }

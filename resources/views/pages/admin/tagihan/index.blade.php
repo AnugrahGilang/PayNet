@@ -31,6 +31,7 @@
                         <th>Status</th>
                         <th>Tanggal</th>
                         <th>Jatuh Tempo</th>
+                        <th>Pesan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -40,23 +41,74 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $t->pelanggan->nama_pelanggan }}</td>
                         <td>{{ $t->periode }}</td>
-                        <td>Rp {{ number_format($t->jumlah_tagihan,0,',','.') }}</td>
                         <td>{{ $t->produk }}</td>
+                        <td>Rp {{ number_format($t->jumlah_tagihan,0,',','.') }}</td>
                         <td>{{ $t->status }}</td>
                         <td>{{ $t->tanggal_terbit }}</td>
                         <td>{{ $t->tanggal_jatuh_tempo }}</td>
                         <td>
-                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                            @php
+                            $tanggalTempo = \Carbon\Carbon::parse($t->tanggal_jatuh_tempo)->translatedFormat('d F Y');
+                            $tanggalBayar = \Carbon\Carbon::parse($t->tanggal_terbit)->translatedFormat('d F Y');
+                            $nominal = 'Rp ' . number_format($t->jumlah_tagihan, 0, ',', '.');
+                            $nama = $t->pelanggan->nama_pelanggan;
+
+                            if ($t->status === 'Belum Lunas') {
+                            $pesan =
+                            "Joglo.net invoice telah diterbitkan%0A%0A".
+                            "Yth. {$nama}%0AHotspot Joglo.Net%0A%0A".
+                            "Mengingatkan Tagihan iuran internet Bulan {$t->periode} sebesar {$nominal}%0A".
+                            "dan utk menghindari pengurangan kecepatan internet,%0A".
+                            "lakukan pembayaran sebelum tanggal {$tanggalTempo}%0A%0A".
+                            "Pembayaran dapat dilakukan melalui:%0A".
+                            "1. ✓ Transfer Bank BSI%0A".
+                            " Norek. 1033702918%0A".
+                            " A/N : Endra Tristyana%0A%0A".
+                            " ✓ Transfer Bank BRI%0A".
+                            " Norek. 388501023931536%0A".
+                            " A/N : Endra Tristyana%0A%0A".
+                            " ✓ Transfer Bank Mandiri%0A".
+                            " Norek. 1710013788073%0A".
+                            " A/N : Endra Tristyana%0A%0A".
+                            " ✓ DANA - (085330748335)%0A%0A".
+                            "2. Setor tunai di waroenk joglo 22%0A%0A".
+                            "Demikian atas informasinya dan kerjasamanya kami sampaikan terimakasih%0A".
+                            "*(Utk pembayaran via transfer dimohon utk menunjukkan bukti transfer dan dikirim lewat WA
+                            ini)*%0A%0A".
+                            "Salam hormat%0AJoglo.net";
+                            } elseif ($t->status === 'Lunas') {
+                            $pesan =
+                            "Terimakasih Sdr./Bp. {$nama}%0A".
+                            "telah memberikan {$nominal} kepada JOGLO.NET_HOTSPOT%0A".
+                            "atas Pembayaran tunai iuran wifi bulan {$t->periode}%0A".
+                            "pada {$tanggalBayar}.";
+                            } else {
+                            $pesan = "Tagihan Anda berstatus *{$t->status}*.";
+                            }
+                            @endphp
+
+                            <!-- Tombol WhatsApp -->
+                            <a href="https://wa.me/{{ $t->pelanggan->no_hp }}?text={{ $pesan }}" target="_blank"
+                                class="btn btn-success btn-sm">
+                                <i class="bi bi-whatsapp"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-warning bi bi-pencil btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#modalEditTagihan{{ $t->id }}">
-                                Edit
                             </button>
+
                             <form action="{{ route('tagihan.destroy', $t->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Yakin hapus?')">Hapus</button>
+                                <button class="btn btn-danger bi-trash-fill btn-sm"
+                                    onclick="return confirm('Yakin hapus?')"></button>
                             </form>
+                            <a href="{{ route('tagihan.print', $t->id) }}" target="_blank" class="btn btn-info btn-sm">
+                                <i class="bi bi-printer"></i>
+                            </a>
                         </td>
+
                     </tr>
                     @empty
                     <tr>
